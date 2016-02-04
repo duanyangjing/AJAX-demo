@@ -21,6 +21,8 @@ var cityPop = [
 //initialize function called when the script loads
 function initialize(){
     cities();
+    jQueryAjax();
+    debugAjax();
 };
 
 //function to create a table with cities and their populations
@@ -101,7 +103,55 @@ function addEvents(){
     $('table').on('click', clickme);
 };
 
+
+//Duanyang's ajax function
+//define AJAX function
+function jQueryAjax(){
+    //basic jQuery ajax method
+    $.ajax("data/MegaCities.geojson", {
+        dataType: "json",
+        success: callback
+    });
+    //This cannot be done outside the callback function
+    //console.log(response);
+};
+
+//define callback function
+function callback(response, status, jqXHRobject){
+
+    //TASKS USING THE DATA GO HERE
+    $("mydiv").append("<br>GeoJSON data (from Duanyang's function): " + response + "</br>");
+    console.log(JSON.stringify(response));
+
+};
+
+
 //run all the functions above
 $(document).ready(initialize);
 $(document).ready(addColumns);
 $(document).ready(addEvents);
+
+
+//Robin's ajax function
+//define an ajax function
+function debugAjax(){
+    //create a variable to store the response of request
+    var mydata;
+    //jUuery ajax function to send data request
+    $.ajax("data/MegaCities.geojson", {
+        dataType: "json",
+        //callback function, executed after data is loaded
+        success: function(response){
+            //store the loaded data to variable mydata
+            mydata = response
+            //call another function to process the loaded data
+            debugCallback(mydata);
+        }
+    });
+    //mydata in the following line is undefined
+    //$("mydiv").append('<br>GeoJSON data:<br>' + JSON.stringify(mydata));
+};
+function debugCallback(mydata){
+    //add the loaded data in string format following the cityPop table
+    $("mydiv").append("<br>GeoJSON data (from Robin's function):</br>" + JSON.stringify(mydata));
+};
